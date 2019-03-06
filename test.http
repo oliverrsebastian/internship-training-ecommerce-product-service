@@ -1,0 +1,35 @@
+GET http://localhost:8080/products
+
+###
+
+GET http://localhost:8080/products/PRD12
+
+POST http://localhost:8080/products/_insert
+Content-Type: application/json
+
+{
+  "id": "PRD12",
+  "name": "Product 12",
+  "price" : 120000,
+  "qty" : 12,
+  "categoryName" : "Product"
+}
+
+###
+
+PUT http://localhost:8080/products/_edit
+Content-Type: application/json
+
+{
+  "id": "PRD12",
+  "name": "Product 15",
+  "price": 120000,
+  "qty": 12,
+  "categoryName": "Product"
+}
+
+###
+
+DELETE http://localhost:8080/products/PRD12
+
+###
