@@ -1,5 +1,6 @@
 package com.ecommerce.product.controller;
 
+import com.ecommerce.product.model.ApiKey;
 import com.ecommerce.product.model.Product;
 import com.ecommerce.product.service.ProductService;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ProductController {
 
     private ProductService productService;
@@ -22,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping(path = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Product getProductById(@PathVariable("productId") String id) {
+    public Product getProductById(@PathVariable("productId") Long id) {
         return productService.getById(id);
     }
 
@@ -39,7 +41,7 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Product deleteProduct(@PathVariable("productId") String id) {
+    public Product deleteProduct(@PathVariable("productId") Long id, ApiKey apiKey) {
         return productService.deleteById(id);
     }
 

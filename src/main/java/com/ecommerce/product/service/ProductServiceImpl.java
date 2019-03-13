@@ -1,50 +1,44 @@
 package com.ecommerce.product.service;
 
 import com.ecommerce.product.model.Product;
+import com.ecommerce.product.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    List<Product> products;
+    private ProductRepository productRepository;
 
-    public ProductServiceImpl() {
-        products = setData();
-    }
-
-    private ArrayList setData() {
-        ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product("PRD1", "Product 1", Long.valueOf(100000), 3, "Product"));
-        products.add(new Product("PRD2", "Product 2", Long.valueOf(120000), 6, "Product"));
-        products.add(new Product("PRD3", "Product 3", Long.valueOf(140000), 9, "Product"));
-        products.add(new Product("PRD4", "Product 4", Long.valueOf(160000), 12, "Product"));
-        products.add(new Product("PRD5", "Product 5", Long.valueOf(180000), 15, "Product"));
-        return products;
+    @Autowired
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @Override
-    public Product getById(String id) {
-        if (id != null && id.startsWith("PRD"))
-            for (Product product : products)
-                if (product.getId().equals(id))
-                    return product;
+    public Product getById(Long id) {
+        if (id != null) {
+            Optional<Product> optional = productRepository.findById(id);
+            return optional.orElse(null);
+        }
         return null;
     }
 
     @Override
     public List<Product> getAll() {
-        return products;
+        return productRepository.findAll();
+        //page.getTotalPages() -> dapet total page
+        //page.getTotalElements() -> dapet total element
     }
 
     @Override
     public Product insertProduct(Product product) {
         if (product != null) {
-            products.add(product);
-            return product;
+            return productRepository.save(product);
         }
         return null;
     }
@@ -55,21 +49,19 @@ public class ProductServiceImpl implements ProductService {
             Product actual = this.getById(product.getId());
             if (actual != null)
                 BeanUtils.copyProperties(product, actual);
-            products.add(actual);
+            productRepository.save(actual);
             return product;
         }
         return null;
     }
 
     @Override
-    public Product deleteById(String id) {
-        if (id != null && id.startsWith("PRD"))
-            for (Product product : products) {
-                if (product.getId().equals(id)) {
-                    products.remove(product);
-                    return product;
-                }
-            }
+    public Product deleteById(Long id) {
+        if (id != null) {
+            Product product = this.getById(id);
+            productRepository.delete(product);
+            return product;
+        }
         return null;
     }
 }

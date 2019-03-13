@@ -5,7 +5,7 @@ import com.ecommerce.product.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    Product getById(String id);
+    Product getById(Long id);
 
     List<Product> getAll();
 
@@ -13,5 +13,5 @@ public interface ProductService {
 
     Product updateProduct(Product product);
 
-    Product deleteById(String id);
+    Product deleteById(Long id);
 }
